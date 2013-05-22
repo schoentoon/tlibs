@@ -1,6 +1,6 @@
 CFLAGS := $(CFLAGS) -Wall -O2 -mtune=native -g
 CC     := gcc
-DEPS   := debug
+DEPS   := debug singly-linked-list
 
 .PHONY: all clean test
 

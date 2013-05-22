@@ -6,7 +6,7 @@ script:
   - make clean
   - make CC=$CC
 after_script:
-  - make test
+  - make test CC=$CC
 notifications:
   irc:
     channels:
