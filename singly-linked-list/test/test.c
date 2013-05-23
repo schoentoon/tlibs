@@ -39,6 +39,9 @@ int main(int argc, char** argv) {
   };
   printf("struct sll_node* front has %d items.\n", sll_count_list(front));
   sll_for_each(front, printTest);
+  front = sll_remove_node(front, front->next->next->next);
+  front = sll_remove_node(front, front);
+  sll_for_each(front, printTest);
   sll_teardown(front, tearDownTest);
   return 0;
 };
