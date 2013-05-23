@@ -73,5 +73,5 @@ struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node) 
     };
     n = n->next;
   };
-  return NULL;
+  return front;
 };
