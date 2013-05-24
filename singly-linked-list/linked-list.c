@@ -58,6 +58,31 @@ unsigned int sll_count_list(struct sll_node* node) {
   return i;
 };
 
+struct sll_node* sll_remove_item(struct sll_node* front, unsigned int item, void teardown_ptr(void*)) {
+  if (item == 0) {
+    struct sll_node* output = front->next;
+    if (teardown_ptr)
+      teardown_ptr(front->ptr);
+    free(front);
+    return output;
+  } else {
+    struct sll_node* n = front;
+    unsigned int i = 1;
+    while (n->next) {
+      if (++i == item) {
+        struct sll_node* m = n->next;
+        n->next = n->next->next;
+        if (teardown_ptr)
+          teardown_ptr(m->ptr);
+        free(m);
+        return front;
+      };
+      n = n->next;
+    };
+  };
+  return NULL;
+};
+
 struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node, void teardown_ptr(void*)) {
   if (front == node) {
     struct sll_node* output = node->next;
@@ -80,12 +105,19 @@ struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node, 
   return front;
 };
 
-void* sll_get_item_at(struct sll_node* front, unsigned int item) {
+struct sll_node* sll_get_node_at(struct sll_node* front, unsigned int item) {
   unsigned int i = 0;
   while (front) {
     if (++i == item)
-      return front->ptr;
+      return front;
     front = front->next;
   };
+  return NULL;
+};
+
+void* sll_get_item_at(struct sll_node* front, unsigned int item) {
+  struct sll_node* n = sll_get_node_at(front, item);
+  if (n)
+    return n->ptr;
   return NULL;
 };
