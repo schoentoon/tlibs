@@ -7,8 +7,10 @@ TESTBIN:= test.bin
 
 all: $(DEPS)
 
-test: $(DEPS)
+$(TESTBIN): $(DEPS)
 	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c debug.o
+
+test: $(TESTBIN)
 	./$(TESTBIN)
 
 debug.o: debug.c debug.h

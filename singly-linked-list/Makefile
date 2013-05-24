@@ -3,13 +3,18 @@ CC     := gcc
 DEPS   := linked-list.o
 TESTBIN:= test.bin
 
-.PHONY: all clean test
+.PHONY: all clean test valgrind
 
 all: $(DEPS)
 
-test: $(DEPS)
+$(TESTBIN): $(DEPS)
 	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c linked-list.o
+
+test: $(TESTBIN)
 	./$(TESTBIN)
+
+valgrind: test
+	valgrind --leak-check=full ./$(TESTBIN)
 
 linked-list.o: linked-list.c linked-list.h
 	$(CC) $(CFLAGS) -c -o linked-list.o linked-list.c
