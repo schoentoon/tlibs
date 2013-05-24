@@ -25,6 +25,8 @@ unsigned int sll_count_list(struct sll_node* node);
 
 struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node);
 
+void* sll_get_item_at(struct sll_node* front, unsigned int item);
+
 void sll_teardown(struct sll_node* node, void teardown_ptr(void*));
 
 #endif //_SINGLY_LINKED_LIST

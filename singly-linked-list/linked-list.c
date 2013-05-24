@@ -75,3 +75,13 @@ struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node) 
   };
   return front;
 };
+
+void* sll_get_item_at(struct sll_node* front, unsigned int item) {
+  unsigned int i = 0;
+  while (front) {
+    if (++i == item)
+      return front->ptr;
+    front = front->next;
+  };
+  return NULL;
+};

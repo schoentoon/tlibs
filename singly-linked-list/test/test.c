@@ -18,13 +18,13 @@ typedef struct {
 
 int printTest(void* ptr) {
   test* test = ptr;
-  printf("Number: %d\n", test->number);
+  printf("[PRINT] Number: %d\n", test->number);
   return 0;
 };
 
 void tearDownTest(void* ptr) {
   test* test = ptr;
-  printf("Tearing down node with number: %d\n", test->number);
+  printf("[TEARDOWN] Tearing down node with number: %d\n", test->number);
 };
 
 int main(int argc, char** argv) {
@@ -37,11 +37,20 @@ int main(int argc, char** argv) {
     test->number = i;
     sll_append(front, test);
   };
-  printf("struct sll_node* front has %d items.\n", sll_count_list(front));
+  printf("[TEST] Counting the elements.\n");
+  printf("[COUNT] We have %d elements.\n", sll_count_list(front));
+  printf("[TEST] Printing all elements.\n");
   sll_for_each(front, printTest);
+  printf("[TEST] Removing 4th and first element.\n");
   front = sll_remove_node(front, front->next->next->next);
   front = sll_remove_node(front, front);
+  printf("[TEST] Counting the elements.\n");
+  printf("[COUNT] We have %d elements.\n", sll_count_list(front));
+  printf("[TEST] Printing all elements.\n");
   sll_for_each(front, printTest);
+  printf("[TEST] Printing 5th element.\n");
+  printTest(sll_get_item_at(front, 5));
+  printf("[TEST] Tearing everything down.\n");
   sll_teardown(front, tearDownTest);
   return 0;
 };
