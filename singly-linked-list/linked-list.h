@@ -23,7 +23,7 @@ int sll_for_each(struct sll_node* node, int callback(void*));
 
 unsigned int sll_count_list(struct sll_node* node);
 
-struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node);
+struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node, void teardown_ptr(void*));
 
 void* sll_get_item_at(struct sll_node* front, unsigned int item);
 

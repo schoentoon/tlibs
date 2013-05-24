@@ -25,6 +25,7 @@ int printTest(void* ptr) {
 void tearDownTest(void* ptr) {
   test* test = ptr;
   printf("[TEARDOWN] Tearing down node with number: %d\n", test->number);
+  free(test);
 };
 
 int main(int argc, char** argv) {
@@ -42,8 +43,8 @@ int main(int argc, char** argv) {
   printf("[TEST] Printing all elements.\n");
   sll_for_each(front, printTest);
   printf("[TEST] Removing 4th and first element.\n");
-  front = sll_remove_node(front, front->next->next->next);
-  front = sll_remove_node(front, front);
+  front = sll_remove_node(front, front->next->next->next, tearDownTest);
+  front = sll_remove_node(front, front, tearDownTest);
   printf("[TEST] Counting the elements.\n");
   printf("[COUNT] We have %d elements.\n", sll_count_list(front));
   printf("[TEST] Printing all elements.\n");

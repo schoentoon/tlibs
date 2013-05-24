@@ -58,9 +58,11 @@ unsigned int sll_count_list(struct sll_node* node) {
   return i;
 };
 
-struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node) {
+struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node, void teardown_ptr(void*)) {
   if (front == node) {
     struct sll_node* output = node->next;
+    if (teardown_ptr)
+      teardown_ptr(node->ptr);
     free(node);
     return output;
   };
@@ -68,6 +70,8 @@ struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node) 
   while (n->next) {
     if (n->next == node) {
       n->next = node->next;
+      if (teardown_ptr)
+        teardown_ptr(node->ptr);
       free(node);
       return front;
     };
