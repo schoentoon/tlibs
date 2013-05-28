@@ -18,10 +18,13 @@ struct bst_leaf {
 
 typedef struct bst_leaf bst_roots;
 typedef int bst_comparator(void* ptr1, void* ptr2);
+typedef int bst_search_for_key(void* ptr, void* key);
 
 bst_roots* new_bst_tree(void* ptr);
 
-struct bst_leaf** bst_tree_search(struct bst_leaf** leaf, void* ptr, bst_comparator comparator);
+void* bst_get_from_tree(bst_roots* tree, void* key, bst_search_for_key searcher);
+
+struct bst_leaf** bst_tree_search(bst_roots* tree, void* ptr, bst_comparator comparator);
 
 int bst_new_leaf(bst_roots* root, void* ptr, bst_comparator comparator);
 

@@ -41,6 +41,10 @@ int test_compare(void* ptr1, void* ptr2) {
   return strcmp(((test*) ptr1)->key, ((test*) ptr2)->key);
 };
 
+int test_compare_key(void* ptr, void* key) {
+  return strcmp(((test*) ptr)->key, (char*) key);
+};
+
 int main(int argc, char** argv) {
   srand(time(NULL));
   test* test = create_test("This is a key");
@@ -58,5 +62,9 @@ int main(int argc, char** argv) {
   test = create_test("Let's add one at the end.");
   bst_new_leaf(root, test, test_compare);
   printf("[TEST] Inserted %d leaves.\n", (leaves + 3));
+  test = bst_get_from_tree(root, "Let's add one at the end.", test_compare_key);
+  printf("[GET] We found leaf with key \"Let's add one at the end.\" at address %p.\n", test);
+  test = bst_get_from_tree(root, "Hopefully this doesn't exist", test_compare_key);
+  printf("[GET] We found leaf with key \"Hopefully this doesn't exist\" at address %p.\n", test);
   return 0;
 };
