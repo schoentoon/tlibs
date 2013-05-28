@@ -8,7 +8,7 @@ TESTBIN:= test.bin
 all: $(DEPS)
 
 $(TESTBIN): $(DEPS)
-	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c linked-list.o
+	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c $(DEPS)
 
 test: $(TESTBIN)
 	./$(TESTBIN)
