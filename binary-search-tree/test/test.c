@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 typedef struct {
   char* key;
@@ -21,7 +22,7 @@ typedef struct {
 
 test* create_test(char* key) {
   test* output = malloc(sizeof(test));
-  output->key = key;
+  output->key = strdup(key);
   output->random = rand();
   return output;
 };
@@ -29,12 +30,17 @@ test* create_test(char* key) {
 test* random_test() {
   static const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   size_t len = rand() % 32;
-  char* key = malloc(len + 1);
+  char key[len + 1];
   int i;
   for (i = 0; i < len; i++)
     key[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
   key[len] = '\0';
   return create_test(key);
+};
+
+void printTest(void* ptr) {
+  test* test = ptr;
+  printf("[PRINT] Key '%s', random %d\n", test->key, test->random);
 };
 
 int test_compare(void* ptr1, void* ptr2) {
@@ -46,7 +52,7 @@ int test_compare_key(void* ptr, void* key) {
 };
 
 int main(int argc, char** argv) {
-  srand(time(NULL));
+  srand(time(NULL)^getpid());
   test* test = create_test("This is a key");
   bst_roots* root = new_bst_tree(test);
   test = create_test("This is another key");
@@ -61,10 +67,12 @@ int main(int argc, char** argv) {
   };
   test = create_test("Let's add one at the end.");
   bst_new_leaf(root, test, test_compare);
-  printf("[TEST] Inserted %d leaves.\n", (leaves + 3));
+  printf("[TEST] Inserted %d leaves.\n", (leaves + 5));
+  printf("[COUNT] Our tree has %d leaves.\n", bst_count_leaves(root));
   test = bst_get_from_tree(root, "Let's add one at the end.", test_compare_key);
   printf("[GET] We found leaf with key \"Let's add one at the end.\" at address %p.\n", test);
   test = bst_get_from_tree(root, "Hopefully this doesn't exist", test_compare_key);
   printf("[GET] We found leaf with key \"Hopefully this doesn't exist\" at address %p.\n", test);
+  bst_for_each(root, printTest);
   return 0;
 };

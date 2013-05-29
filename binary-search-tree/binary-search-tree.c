@@ -60,3 +60,22 @@ int bst_new_leaf(bst_roots* root, void* ptr, bst_comparator comparator) {
   free(tmp_leaf);
   return 0;
 };
+
+unsigned int bst_count_leaves(bst_roots* root) {
+  if (!root)
+    return 0;
+  unsigned int result = 1;
+  if (root->left)
+    result += bst_count_leaves(root->left);
+  if (root->right)
+    result += bst_count_leaves(root->right);
+  return result;
+};
+
+void bst_for_each(bst_roots* root, bst_function function) {
+  if (root) {
+    function(root);
+    bst_for_each(root->left, function);
+    bst_for_each(root->right, function);
+  };
+};
