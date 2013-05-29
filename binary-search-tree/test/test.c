@@ -29,7 +29,8 @@ test* create_test(char* key) {
 
 test* random_test() {
   static const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  size_t len = rand() % 32;
+  size_t len = rand() % 16;
+  len += 16;
   char key[len + 1];
   int i;
   for (i = 0; i < len; i++)
@@ -68,6 +69,7 @@ int main(int argc, char** argv) {
   test = create_test("Now for some random strings");
   bst_grow_leaf(root, test, test_compare);
   int leaves = rand() % 32;
+  leaves += 16;
   int i;
   for (i = 0; i <= leaves; i++) {
     test = random_test();
