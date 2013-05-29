@@ -46,9 +46,9 @@ void* bst_get_from_tree(bst_roots* tree, void* key, bst_search_for_key searcher)
   return NULL;
 };
 
-int bst_new_leaf(bst_roots* root, void* ptr, bst_comparator comparator) {
+int bst_grow_leaf(bst_roots* root, void* ptr, bst_comparator comparator) {
   if (!comparator)
-    return -1;
+    return 0;
   struct bst_leaf* tmp_leaf = malloc(sizeof(struct bst_leaf));
   memset(tmp_leaf, 0, sizeof(struct bst_leaf));
   tmp_leaf->ptr = ptr;

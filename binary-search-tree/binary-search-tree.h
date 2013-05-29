@@ -28,7 +28,7 @@ void* bst_get_from_tree(bst_roots* tree, void* key, bst_search_for_key searcher)
 
 struct bst_leaf** bst_tree_search(bst_roots* tree, void* ptr, bst_comparator comparator);
 
-int bst_new_leaf(bst_roots* root, void* ptr, bst_comparator comparator);
+int bst_grow_leaf(bst_roots* root, void* ptr, bst_comparator comparator);
 
 unsigned int bst_count_leaves(bst_roots* root);
 

@@ -64,17 +64,20 @@ int main(int argc, char** argv) {
   test* test = create_test("This is a key");
   bst_roots* root = new_bst_tree(test);
   test = create_test("This is another key");
-  bst_new_leaf(root, test, test_compare);
+  bst_grow_leaf(root, test, test_compare);
   test = create_test("Now for some random strings");
-  bst_new_leaf(root, test, test_compare);
+  bst_grow_leaf(root, test, test_compare);
   int leaves = rand() % 32;
   int i;
   for (i = 0; i <= leaves; i++) {
     test = random_test();
-    bst_new_leaf(root, test, test_compare);
+    if (!bst_grow_leaf(root, test, test_compare)) {
+      printf("[DUPLICATE] Couldn't add test struct with key '%s'\n", test->key);
+      teardown_test(test);
+    }
   };
   test = create_test("Let's add one at the end.");
-  bst_new_leaf(root, test, test_compare);
+  bst_grow_leaf(root, test, test_compare);
   printf("[TEST] Inserted %d leaves.\n", (leaves + 5));
   printf("[COUNT] Our tree has %d leaves.\n", bst_count_leaves(root));
   test = bst_get_from_tree(root, "Let's add one at the end.", test_compare_key);
