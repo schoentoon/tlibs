@@ -20,6 +20,7 @@ typedef struct bst_leaf bst_roots;
 typedef int bst_comparator(void* ptr1, void* ptr2);
 typedef int bst_search_for_key(void* ptr, void* key);
 typedef void bst_function(void* ptr);
+typedef void teardown_function(void* ptr);
 
 bst_roots* new_bst_tree(void* ptr);
 
@@ -32,5 +33,7 @@ int bst_new_leaf(bst_roots* root, void* ptr, bst_comparator comparator);
 unsigned int bst_count_leaves(bst_roots* root);
 
 void bst_for_each(bst_roots* root, bst_function function);
+
+void bst_dig_up_tree(bst_roots* roots, teardown_function shovel);
 
 #endif //_BINARY_SEARCH_TREE_H

@@ -51,6 +51,14 @@ int test_compare_key(void* ptr, void* key) {
   return strcmp(((test*) ptr)->key, (char*) key);
 };
 
+void teardown_test(void* ptr) {
+  printf("[TEARDOWN] Tearing down leaf at %p.\n", ptr);
+  test* test = ptr;
+  if (test->key)
+    free(test->key);
+  free(test);
+};
+
 int main(int argc, char** argv) {
   srand(time(NULL)^getpid());
   test* test = create_test("This is a key");
@@ -74,5 +82,6 @@ int main(int argc, char** argv) {
   test = bst_get_from_tree(root, "Hopefully this doesn't exist", test_compare_key);
   printf("[GET] We found leaf with key \"Hopefully this doesn't exist\" at address %p.\n", test);
   bst_for_each(root, printTest);
+  bst_dig_up_tree(root, teardown_test);
   return 0;
 };

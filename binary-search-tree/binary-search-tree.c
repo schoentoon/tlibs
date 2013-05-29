@@ -79,3 +79,23 @@ void bst_for_each(bst_roots* root, bst_function function) {
     bst_for_each(root->right, function);
   };
 };
+
+static void bst_teardown_leaf(struct bst_leaf* leaf, teardown_function shovel) {
+  if (leaf) {
+    bst_teardown_leaf(leaf->left, shovel);
+    bst_teardown_leaf(leaf->right, shovel);
+    if (shovel)
+      shovel(leaf->ptr);
+  };
+  free(leaf);
+};
+
+void bst_dig_up_tree(bst_roots* roots, teardown_function shovel) {
+  if (roots) {
+    bst_teardown_leaf(roots->left, shovel);
+    bst_teardown_leaf(roots->right, shovel);
+  };
+  if (shovel)
+    shovel(roots->ptr);
+  free(roots);
+};
