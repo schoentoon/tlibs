@@ -74,7 +74,7 @@ unsigned int bst_count_leaves(bst_roots* root) {
 
 void bst_for_each(bst_roots* root, bst_function function) {
   if (root) {
-    function(root);
+    function(root->ptr);
     bst_for_each(root->left, function);
     bst_for_each(root->right, function);
   };
