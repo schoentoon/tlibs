@@ -11,7 +11,7 @@ $(TESTBIN): $(DEPS)
 	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c $(DEPS)
 
 test: $(TESTBIN)
-	time ./$(TESTBIN)
+	/usr/bin/time ./$(TESTBIN)
 
 valgrind: test
 	valgrind --leak-check=full ./$(TESTBIN)
