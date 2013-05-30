@@ -2,6 +2,7 @@ CFLAGS := $(CFLAGS) -Wall -O2 -mtune=native -g
 CC     := gcc
 DEPS   := binary-search-tree.o
 TESTBIN:= test.bin
+TIME   := /usr/bin/time
 
 .PHONY: all clean test valgrind
 
@@ -11,7 +12,7 @@ $(TESTBIN): $(DEPS)
 	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c $(DEPS)
 
 test: $(TESTBIN)
-	/usr/bin/time ./$(TESTBIN)
+	$(TIME) ./$(TESTBIN)
 
 valgrind: test
 	valgrind --leak-check=full ./$(TESTBIN)
