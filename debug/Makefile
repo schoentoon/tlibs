@@ -11,7 +11,7 @@ $(TESTBIN): $(DEPS)
 	$(CC) $(CFLAGS) -I. -o $(TESTBIN) test/test.c $(DEPS)
 
 test: $(TESTBIN)
-	./$(TESTBIN)
+	time ./$(TESTBIN)
 
 debug.o: debug.c debug.h
 	$(CC) $(CFLAGS) -c -o debug.o debug.c
