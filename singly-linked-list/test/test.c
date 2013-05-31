@@ -31,27 +31,27 @@ void tearDownTest(void* ptr) {
 int main(int argc, char** argv) {
   test* test = malloc(sizeof(test));
   test->number = 1;
-  struct sll_node* front = new_sll_node(test);
+  singly_linked_list* sll = new_singly_linked_list(test);
   int i;
   for (i = 2; i <= 10; i++) {
     test = malloc(sizeof(test));
     test->number = i;
-    sll_append(front, test);
+    sll_append(sll, test);
   };
   printf("[TEST] Counting the elements.\n");
-  printf("[COUNT] We have %d elements.\n", sll_count_list(front));
+  printf("[COUNT] We have %d elements.\n", sll_count_list(sll));
   printf("[TEST] Printing all elements.\n");
-  sll_for_each(front, printTest);
+  sll_for_each(sll, printTest);
   printf("[TEST] Removing 4th and first element.\n");
-  front = sll_remove_item(front, 4, tearDownTest);
-  front = sll_remove_node(front, front, tearDownTest);
+  sll_remove_item_at(sll, 4, tearDownTest);
+  sll_remove_item(sll, sll_get_item_at(sll, 1), tearDownTest);
   printf("[TEST] Counting the elements.\n");
-  printf("[COUNT] We have %d elements.\n", sll_count_list(front));
+  printf("[COUNT] We have %d elements.\n", sll_count_list(sll));
   printf("[TEST] Printing all elements.\n");
-  sll_for_each(front, printTest);
+  sll_for_each(sll, printTest);
   printf("[TEST] Printing 5th element.\n");
-  printTest(sll_get_item_at(front, 5));
+  printTest(sll_get_item_at(sll, 5));
   printf("[TEST] Tearing everything down.\n");
-  sll_teardown(front, tearDownTest);
+  sll_teardown(sll, tearDownTest);
   return 0;
 };

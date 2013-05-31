@@ -12,6 +12,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct sll_node {
+  void* ptr;
+  struct sll_node* next;
+};
+
 struct sll_node* new_sll_node(void* ptr) {
   struct sll_node* output = malloc(sizeof(struct sll_node));
   memset(output, 0, sizeof(struct sll_node));
@@ -19,17 +24,29 @@ struct sll_node* new_sll_node(void* ptr) {
   return output;
 };
 
-struct sll_node* sll_append(struct sll_node* node, void* ptr) {
-  while (node->next)
-    node = node->next;
-  node->next = new_sll_node(ptr);
-  return node->next;
+singly_linked_list* new_singly_linked_list(void* ptr) {
+  singly_linked_list* output = malloc(sizeof(singly_linked_list));
+  memset(output, 0, sizeof(singly_linked_list));
+  if (ptr) {
+    output->first = new_sll_node(ptr);
+    output->last = output->first;
+  }
+  return output;
 };
 
-int sll_for_each(struct sll_node* node, int callback(void*)) {
+int sll_append(singly_linked_list* sll, void* ptr) {
+  sll->last->next = new_sll_node(ptr);
+  if (!sll->last->next)
+    return 0;
+  sll->last = sll->last->next;
+  return 1;
+};
+
+int sll_for_each(singly_linked_list* sll, int callback(void*)) {
   if (!callback)
     return 1;
   int res = 0;
+  struct sll_node* node = sll->first;
   while (node) {
     res = callback(node->ptr);
     if (res)
@@ -39,7 +56,8 @@ int sll_for_each(struct sll_node* node, int callback(void*)) {
   return res;
 };
 
-void sll_teardown(struct sll_node* node, void teardown_ptr(void*)) {
+void sll_teardown(singly_linked_list* sll, void teardown_ptr(void*)) {
+  struct sll_node* node = sll->first;
   while (node) {
     if (teardown_ptr)
       teardown_ptr(node->ptr);
@@ -47,10 +65,12 @@ void sll_teardown(struct sll_node* node, void teardown_ptr(void*)) {
     free(node);
     node = next;
   };
+  free(sll);
 };
 
-unsigned int sll_count_list(struct sll_node* node) {
+unsigned int sll_count_list(singly_linked_list* sll) {
   unsigned int i = 0;
+  struct sll_node* node = sll->first;
   while (node) {
     i++;
     node = node->next;
@@ -58,15 +78,16 @@ unsigned int sll_count_list(struct sll_node* node) {
   return i;
 };
 
-struct sll_node* sll_remove_item(struct sll_node* front, unsigned int item, void teardown_ptr(void*)) {
+int sll_remove_item_at(singly_linked_list* sll, unsigned int item, void teardown_ptr(void*)) {
   if (item == 0) {
-    struct sll_node* output = front->next;
+    struct sll_node* to_remove = sll->first;
+    sll->first = sll->first->next;
     if (teardown_ptr)
-      teardown_ptr(front->ptr);
-    free(front);
-    return output;
+      teardown_ptr(to_remove->ptr);
+    free(to_remove);
+    return 1;
   } else {
-    struct sll_node* n = front;
+    struct sll_node* n = sll->first;
     unsigned int i = 1;
     while (n->next) {
       if (++i == item) {
@@ -75,49 +96,43 @@ struct sll_node* sll_remove_item(struct sll_node* front, unsigned int item, void
         if (teardown_ptr)
           teardown_ptr(m->ptr);
         free(m);
-        return front;
+        return 1;
       };
       n = n->next;
     };
   };
-  return NULL;
+  return 0;
 };
 
-struct sll_node* sll_remove_node(struct sll_node* front, struct sll_node* node, void teardown_ptr(void*)) {
-  if (front == node) {
-    struct sll_node* output = node->next;
+int sll_remove_item(singly_linked_list* sll, void* ptr, void teardown_ptr(void*)) {
+  struct sll_node* node = sll->first;
+  if (node->ptr == ptr) {
+    sll->first = sll->first->next;
     if (teardown_ptr)
       teardown_ptr(node->ptr);
     free(node);
-    return output;
+    return 1;
   };
-  struct sll_node* n = front;
-  while (n->next) {
-    if (n->next == node) {
-      n->next = node->next;
+  while (node->next) {
+    if (node->next->ptr == ptr) {
+      node->next = node->next;
       if (teardown_ptr)
         teardown_ptr(node->ptr);
       free(node);
-      return front;
+      return 1;
     };
-    n = n->next;
+    node = node->next;
   };
-  return front;
+  return 0;
 };
 
-struct sll_node* sll_get_node_at(struct sll_node* front, unsigned int item) {
+void* sll_get_item_at(singly_linked_list* sll, unsigned int item) {
   unsigned int i = 0;
-  while (front) {
+  struct sll_node* node = sll->first;
+  while (node) {
     if (++i == item)
-      return front;
-    front = front->next;
-  };
-  return NULL;
-};
-
-void* sll_get_item_at(struct sll_node* front, unsigned int item) {
-  struct sll_node* n = sll_get_node_at(front, item);
-  if (n)
-    return n->ptr;
+      return node->ptr;
+    node = node->next;
+  }
   return NULL;
 };
