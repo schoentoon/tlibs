@@ -10,6 +10,8 @@
 #ifndef _SINGLY_LINKED_LIST
 #define _SINGLY_LINKED_LIST
 
+struct sll_node;
+
 typedef struct {
   struct sll_node* first;
   struct sll_node* last;
