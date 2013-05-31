@@ -19,6 +19,8 @@ struct sll_node {
 
 struct sll_node* new_sll_node(void* ptr) {
   struct sll_node* output = malloc(sizeof(struct sll_node));
+  if (!output)
+    return NULL;
   memset(output, 0, sizeof(struct sll_node));
   output->ptr = ptr;
   return output;
@@ -35,10 +37,17 @@ singly_linked_list* new_singly_linked_list(void* ptr) {
 };
 
 int sll_append(singly_linked_list* sll, void* ptr) {
-  sll->last->next = new_sll_node(ptr);
-  if (!sll->last->next)
-    return 0;
-  sll->last = sll->last->next;
+  if (sll->first) {
+    sll->last->next = new_sll_node(ptr);
+    if (!sll->last->next)
+      return 0;
+    sll->last = sll->last->next;
+  } else {
+    sll->first = new_sll_node(ptr);
+    if (!sll->first)
+      return 0;
+    sll->last = sll->first;
+  }
   return 1;
 };
 

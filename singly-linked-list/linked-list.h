@@ -22,6 +22,8 @@ typedef struct {
  */
 singly_linked_list* new_singly_linked_list(void* ptr);
 
+#define new_empty_singly_linked_list() new_singly_linked_list(NULL)
+
 /** @summary Appends a pointer to the end of your linked list
  * @param ssl The singly linked list to append our element to
  * @param ptr The actual pointer to add to our list
