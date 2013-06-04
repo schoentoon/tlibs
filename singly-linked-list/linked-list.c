@@ -121,16 +121,18 @@ int sll_remove_item(singly_linked_list* sll, void* ptr, void teardown_ptr(void*)
       teardown_ptr(node->ptr);
     free(node);
     return 1;
-  };
-  while (node->next) {
-    if (node->next->ptr == ptr) {
-      node->next = node->next;
-      if (teardown_ptr)
-        teardown_ptr(node->ptr);
-      free(node);
-      return 1;
+  } else {
+    while (node->next) {
+      if (node->next->ptr == ptr) {
+        struct sll_node* to_free = node->next;
+        node->next = node->next->next;
+        if (teardown_ptr)
+          teardown_ptr(to_free->ptr);
+        free(to_free);
+        return 1;
+      };
+      node = node->next;
     };
-    node = node->next;
   };
   return 0;
 };

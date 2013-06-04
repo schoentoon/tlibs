@@ -42,9 +42,12 @@ int main(int argc, char** argv) {
   printf("[COUNT] We have %d elements.\n", sll_count_list(sll));
   printf("[TEST] Printing all elements.\n");
   sll_for_each(sll, printTest);
-  printf("[TEST] Removing 4th and first element.\n");
+  printf("[TEST] Removing 4th element.\n");
   sll_remove_item_at(sll, 4, tearDownTest);
+  printf("[TEST] Removing 1st element.\n");
   sll_remove_item(sll, sll_get_item_at(sll, 1), tearDownTest);
+  printf("[TEST] Removing 5th element.\n");
+  sll_remove_item(sll, sll_get_item_at(sll, 5), tearDownTest);
   printf("[TEST] Counting the elements.\n");
   printf("[COUNT] We have %d elements.\n", sll_count_list(sll));
   printf("[TEST] Printing all elements.\n");
